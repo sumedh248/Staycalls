@@ -1,20 +1,26 @@
 const mongoose = require("mongoose");
+const schema = mongoose.Schema;
 
-const listschema=new mongoose.Schema({
-   title : {
-      type : string,
-      required : true
+const listschema = new mongoose.Schema({
+   title: {
+      type: String,
+      required: true
    },
-   img : {
-      type : string,
-      default : "link",
-   
+   description: {
+      type: String
    },
-   location : {
-      type : string,
-      required : true
-   }
-   
+   img: {
+      type: String,
+      default: "https://unsplash.com/photos/kodak-store-with-vintage-photographs-displayed-fBaXoc045xs",
+      set: (v) => v === "" ? "https://unsplash.com/photos/kodak-store-with-vintage-photographs-displayed-fBaXoc045xs" : v,
+   },
+   location: {
+      type: String,
+      required: true
+   },
+   price: String,
+   country: String
+
 });
-const listing = mongoose.model("listing",listschema);
-module.exports= listing;
+const Listing = mongoose.model("Listing", listschema);
+module.exports = Listing;
