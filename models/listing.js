@@ -24,3 +24,18 @@ const listschema = new mongoose.Schema({
 });
 const Listing = mongoose.model("Listing", listschema);
 module.exports = Listing;
+
+// app.get("/testlisting",async  (req,res)=>{
+//    let sampletesting = new Listing({
+//       title : "k.mahankal",
+//       description : "village",
+//       location : "sangli",
+//       price : "300",
+//       country : "ind"
+//       });
+
+//       await sampletesting.save();
+//       res.send("data saved");
+// });
+
+

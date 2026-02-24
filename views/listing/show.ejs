@@ -1,0 +1,15 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+   <h3>listing data</h3>
+   <ul>
+      <li><%= listingdata.title %></li>
+      <li><%= listingdata.description %></li>
+      <li><%= listingdata.location %></li>
+      <li>&#8377; <%= listingdata.price.toLocaleString("en-IN") %></li>
+      <li><%= listingdata.country %></li>
+   </ul>
+
+      <a href="/listing/<%= listingdata.id %>/edit">edit data</a>
+      <br><br><a href="/listing/<%= listingdata.id %>/delete">delete data</a>
+
+</body>

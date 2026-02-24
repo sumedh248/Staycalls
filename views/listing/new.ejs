@@ -1,0 +1,12 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<body>
+   <h3>fill details</h3>
+   <form method="POST" action="/listing">
+      <input type="text" placeholder="enter title" name="listing[title]"><br><br>
+      <textarea type="text" placeholder="enter description" name="listing[description]"></textarea><br><br>
+      <input type="text" placeholder="enter img" name="listing[img]"><br><br>
+      <input type="number" placeholder="enter price" name="listing[price]"><br><br>
+      <input type="text" placeholder="enter country" name="listing[country]"><br><br>
+      <input type="text" placeholder="enter location" name="listing[location]"><br><br>
+      <button type="submit">save data</button>
+   </form>
