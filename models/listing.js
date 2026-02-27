@@ -1,29 +1,38 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
+const defaultImg = "https://images.unsplash.com/photo-1480796927426-f609979314bd?auto=format&fit=crop&w=800&q=60";
+
 const listschema = new mongoose.Schema({
    title: {
       type: String,
       required: true
    },
-   description:  {
-      type: String
+
+   description: String,
+
+   image: {
+      filename: {
+         type: String,
+         default: "listingimage"
+      },
+      url: {
+         type: String,
+         default: defaultImg,
+         set: (v) => v === "" ? defaultImg : v
+      }
    },
-   img: {
-      type: String,
-      default: "https://images.unsplash.com/photo-1480796927426-f609979314bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHRva3lvfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-      set: (v) => v === "" ? "https://images.unsplash.com/photo-1480796927426-f609979314bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHRva3lvfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60" : v,
-   },
+
    location: {
       type: String,
       required: true
    },
-   price: String,
-   country: String
 
+   price: Number,
+   country: String
 });
-const Listing = mongoose.model("Listing", listschema);
-module.exports = Listing;
+
+module.exports = mongoose.model("Listing", listschema);
 
 // app.get("/testlisting",async  (req,res)=>{
 //    let sampletesting = new Listing({

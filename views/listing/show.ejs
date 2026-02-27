@@ -1,15 +1,29 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<body>
-   <h3>listing data</h3>
-   <ul>
-      <li><%= listingdata.title %></li>
-      <li><%= listingdata.description %></li>
-      <li><%= listingdata.location %></li>
-      <li>&#8377; <%= listingdata.price.toLocaleString("en-IN") %></li>
-      <li><%= listingdata.country %></li>
-   </ul>
 
-      <a href="/listing/<%= listingdata.id %>/edit">edit data</a>
-      <br><br><a href="/listing/<%= listingdata.id %>/delete">delete data</a>
+   <body>
+      <div class="row mt-3">
+         <div class="col-8 offset-3">
+            <h3>listing data</h3>
+         </div>
+      </div>
+      <div class="card col-6 offset-3">
+         <img src="<%= listingdata.image.url %>" class="card-img-top show-img" alt="listing_image">
+         <div class="card-body">
+            <p class="card-text">
+               <b>
+                  <%= listingdata.title %> <br>
+               </b>
+               <%= listingdata.description %> <br>
+                  <%= listingdata.location %> <br>
+                     &#8377; <%= listingdata.price.toLocaleString("en-IN") %> <br>
+                        <%= listingdata.country %> <br>
+            </p>
+         </div>
+      </div>
 
-</body>
+
+      <div class="mb-3">
+         <a class="btn btn-dark col-1 offset-3 btn-new  " href="/listing/<%= listingdata.id %>/edit">edit data</a>
+         <a class="btn btn-dark" href="/listing/<%= listingdata.id %>/delete">delete data</a>
+      </div>
+   </body>
