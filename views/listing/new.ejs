@@ -4,34 +4,40 @@
       <div class="row mt-3">
          <div class="col-8 offset-2">
             <h3>fill details</h3>
-            <form method="POST" action="/listing">
+            <form method="POST" action="/listing" novalidate class="needs-validation" >
                <div class="mb-3">
                   <label for="title" class="form-label">Title</label>
-                  <input type="text" placeholder="enter title" name="listing[title]" class="form-control">
+                  <input type="text" placeholder="enter title" name="listing[title]" class="form-control" required>
+                  <div class="valid-feedback">Title looks good</div>
+                  <div class="invalid-feedback">Enter title</div>
                </div>
                <div class="mb-3">
                   <label for="Description" class="form-label">Description</label>
                   <textarea type="text" placeholder="enter description" name="listing[description]"
-                     class="form-control"></textarea>
-
+                     class="form-control" required></textarea>
+                  <div class="invalid-feedback">Enter Description</div>
                </div>
                <div class="mb-3">
                   <label for="Image link" class="form-label">Image link</label>
-                  <input type="text" placeholder="enter img" name="listing[img]" class="form-control">
+                  <input type="text" placeholder="enter img" name="listing[img]" class="form-control" required>
+                  <div class="invalid-feedback">Enter image link</div>
                </div>
                <div class="row">
                   <div class="col-md-4 mb-3">
                      <label for="Price" class="form-label">Price</label>
-                     <input type="number" placeholder="enter price" name="listing[price]" class="form-control">
+                     <input  placeholder="enter price" name="listing[price]" class="form-control" required>
+                     <div class="invalid-feedback">Enter price</div>
                   </div>
                   <div class="col-md-8 mb-3">
                      <label for="Country" class="form-label">Country</label>
-                     <input type="text" placeholder="enter country" name="listing[country]" class="form-control">
+                     <input type="text" placeholder="enter country" name="listing[country]" class="form-control" required>
+                     <div class="invalid-feedback">Enter country</div>
                   </div>
                </div>
                <div class="mb-3">
                   <label for="Location" class="form-label">Location</label>
-                  <input type="text" placeholder="enter location" name="listing[location]" class="form-control">
+                  <input type="text" placeholder="enter location" name="listing[location]" class="form-control" required>
+                  <div class="invalid-feedback">Enter location</div>
                </div>
                
                <button type="submit" class="btn btn-dark btn-new mt-3 mb-3">save data</button>
