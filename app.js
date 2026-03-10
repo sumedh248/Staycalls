@@ -2,12 +2,14 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsmate = require("ejs-mate");
 const wrapasync = require("./utils/wrapasync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const {listingschema} = require("./schema.js");
+const {listingschema, reviewsschema} = require("./schema.js");
+const { wrap } = require("module");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -37,6 +39,16 @@ const validatelisting = (req, res, next) => {
    }
 }
 
+const validatereview = (req, res, next) => {
+   let {error} = reviewsschema.validate(req.body);
+   if(error){
+      let errmsg = error.details.map((el) => el.message).join(",");
+      throw new ExpressError(400, errmsg);
+   }else{
+      next();
+   }
+}
+
 app.get("/", (req, res) => {
    res.send("app started");
 });
@@ -52,7 +64,7 @@ app.get("/listing/new", (req, res) => {
 
 app.get("/listing/:id", wrapasync(async (req, res) => {
    const { id } = req.params;
-   const listingdata = await Listing.findById(id);
+   const listingdata = await Listing.findById(id).populate("Review");
    res.render("listing/show.ejs", { listingdata });
 }));
 
@@ -81,6 +93,16 @@ app.get("/listing/:id/delete", wrapasync(async (req, res) => {
    const { id } = req.params;
    await Listing.findByIdAndDelete(id);
    res.redirect(`/listing`);
+}));
+app.post("/listing/:id/reviews", validatereview,  wrapasync(async(req,res) => {
+   let listing = await Listing.findById(req.params.id);
+   let newreviews = new Review(req.body.Review);
+
+   listing.Review.push(newreviews);
+
+   await listing.save();
+   await newreviews.save();
+   res.redirect(`/listing/${listing._id}`);
 }));
 
 app.use((req, res, next) => {

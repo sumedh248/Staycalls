@@ -30,11 +30,11 @@ const listschema = new mongoose.Schema({
 
    price: Number,
    country: String,
-   reviews : [
-      {
-         type : Schema.Types.ObjectId,
-         ref : "review"
-      }
+   Review : [
+         {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Review",
+         },
    ]
 });
 

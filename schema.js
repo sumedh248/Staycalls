@@ -6,7 +6,13 @@ module.exports.listingschema = Joi.object({
       image : Joi.string().required(),
       location : Joi.string().required(),
       country : Joi.string().required(),
-      price : Joi.number().required().min(0),
+      price : Joi.number().required().min(0),   
    }).required()
 });
 
+module.exports.reviewsschema = Joi.object({
+   Review : Joi.object({
+      rating : Joi.number().max(5).min(1),
+      comments : Joi.string().required()
+   }).required()
+})
