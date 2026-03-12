@@ -23,8 +23,8 @@
 
 
       <div class="mb-3">
-         <a class="btn btn-dark col-1 offset-3 btn-new  " href="/listing/<%= listingdata.id %>/edit">edit data</a>
-         <a class="btn btn-dark" href="/listing/<%= listingdata.id %>/delete">delete data</a>
+         <a class="btn btn-dark col-1 offset-3 btn-new  " href="/listing/<%= listingdata.id %>/edit">edit</a>
+         <a class="btn btn-dark" href="/listing/<%= listingdata.id %>/delete">delete</a>
       </div>
 
       <div>
@@ -62,6 +62,9 @@
                               &#11088;
                            <% } %>
                      </p>
+                     <form method="post" action="/listing/<%= listingdata.id %>/reviews/<%= Review._id %>?_method=DELETE">
+                        <button class="btn btn-sm btn-dark">Delete</button>
+                     </form>
                   </div>
                </div>
                <% } %>

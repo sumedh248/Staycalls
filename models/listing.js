@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const schema = mongoose.Schema;
+const Review = require("./review.js");
+const { listingschema } = require("../schema");
+const Schema = mongoose.Schema;
 
 const defaultImg = "https://images.unsplash.com/photo-1480796927426-f609979314bd?auto=format&fit=crop&w=800&q=60";
 
@@ -37,20 +39,13 @@ const listschema = new mongoose.Schema({
          },
    ]
 });
-
+listschema.post("findOneAndDelete", async(listing) => {
+   if(listing){
+      await Review.deleteMany({_id : {$in : listing.Review}} );
+   }
+})
 module.exports = mongoose.model("Listing", listschema);
 
-// app.get("/testlisting",async  (req,res)=>{
-//    let sampletesting = new Listing({
-//       title : "k.mahankal",
-//       description : "village",
-//       location : "sangli",
-//       price : "300",
-//       country : "ind"
-//       });
 
-//       await sampletesting.save();
-//       res.send("data saved");
-// });
 
 
