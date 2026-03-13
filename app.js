@@ -7,6 +7,10 @@ const ejsmate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
 
 // getting route links 
 const listings = require("./routes/listing.js");
@@ -30,7 +34,6 @@ const sessionoptions = {
    }
 }
 
-app.use(session(sessionoptions));
 
 const MONGOURL = "mongodb://127.0.0.1:27017/roadguests";
 main().then(() => {
@@ -46,7 +49,26 @@ app.get("/", (req, res) => {
    res.send("app started");
 });
 
+app.get("/demouser",async (req,res)=>{
+   const fakeuser = new User({
+      email : "main@gmail.com",
+      username : "sumedh"
+   });
+
+   const saveduser = await User.register(fakeuser, "sorry");
+   res.send(saveduser);
+})
+
+app.use(session(sessionoptions));
 app.use(flash());
+
+passport.initialize();
+passport.session();
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 app.use((req, res, next)=> {
    res.locals.success = req.flash("success");
