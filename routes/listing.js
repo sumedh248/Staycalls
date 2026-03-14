@@ -4,6 +4,7 @@ const wrapasync = require("../utils/wrapasync.js");
 const ExpressError = require("../utils/ExpressError.js");
 const { listingschema, reviewsschema } = require("../schema.js");
 const Listing = require("../models/listing.js");
+const { isloggedin } = require("../middleware.js");
 
 const validatelisting = (req, res, next) => {
    let { error } = listingschema.validate(req.body);
@@ -23,7 +24,7 @@ router.get("/", wrapasync(async (req, res) => {
 }));
 
 // new route 
-router.get("/new", (req, res) => {
+router.get("/new", isloggedin, (req, res) => {
    res.render("listing/new.ejs");
 });
 
@@ -31,16 +32,16 @@ router.get("/new", (req, res) => {
 router.get("/:id", wrapasync(async (req, res) => {
    const { id } = req.params;
    const listingdata = await Listing.findById(id).populate("Review");
-      if(!listingdata){
-         req.flash("error", "post you are looking for does not eist");
-         res.redirect("/listing");
-         return;
-      }
-      res.render("listing/show.ejs", { listingdata });
+   if (!listingdata) {
+      req.flash("error", "post you are looking for does not eist");
+      res.redirect("/listing");
+      return;
+   }
+   res.render("listing/show.ejs", { listingdata });
 }));
 
 // create listing 
-router.post("/", validatelisting, wrapasync(async (req, res, next) => {
+router.post("/", isloggedin, validatelisting, wrapasync(async (req, res, next) => {
    const newlisting = new Listing(req.body.listing);
    await newlisting.save();
    req.flash("success", "new post added successfully");
@@ -48,19 +49,19 @@ router.post("/", validatelisting, wrapasync(async (req, res, next) => {
 }));
 
 // edit route  
-router.get("/:id/edit", wrapasync(async (req, res) => {
+router.get("/:id/edit", isloggedin, wrapasync(async (req, res) => {
    const { id } = req.params;
    const listing1 = await Listing.findById(id);
-      if(!listing1){
-         req.flash("error", "post you are looking for does not eist");
-         res.redirect("/listing");
-         return;
-      }
-      res.render("listing/edit.ejs", { listing1 });
+   if (!listing1) {
+      req.flash("error", "post you are looking for does not eist");
+      res.redirect("/listing");
+      return;
+   }
+   res.render("listing/edit.ejs", { listing1 });
 }));
 
 // post edit 
-router.put("/:id", wrapasync(async (req, res) => {
+router.put("/:id", isloggedin, wrapasync(async (req, res) => {
    if (!req.body.listing) {
       throw new ExpressError(404, "Please enter some valid data");
    }
@@ -80,7 +81,7 @@ router.put("/:id", wrapasync(async (req, res) => {
 }));
 
 // post delete 
-router.get("/:id/delete", wrapasync(async (req, res) => {
+router.get("/:id/delete", isloggedin, wrapasync(async (req, res) => {
    const { id } = req.params;
    await Listing.findByIdAndDelete(id);
    req.flash("success", "post deleted");

@@ -1,0 +1,26 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+   <body>
+      <div class="row mt-3">
+         <div class="col-6 offset-3">
+            <h3 class="mb-3">Log in on Staycalls</h3>
+            <form method="post"  action="/login" class="needs-validation" novalidate>
+               <div class="mb-3">
+                  <label for="username" class="form-label">username</label>
+                  <input type="text" placeholder="enter username" name="username" class="form-control" required>
+                  <div class="valid-feedback">username looks good</div>
+                  <div class="invalid-feedback">Enter username</div>
+               </div>
+
+               <div class="mb-3">
+                  <label for="password" class="form-label">password</label>
+                  <input type="password" placeholder="enter password" name="password" class="form-control" required>
+                  <div class="valid-feedback">password looks good</div>
+                  <div class="invalid-feedback">Enter password</div>
+               </div>
+
+               <button type="submit" class="btn btn-success">login</button>
+            </form>
+         </div>
+      </div>
+   </body>

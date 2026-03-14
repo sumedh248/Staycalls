@@ -13,8 +13,9 @@ const User = require("./models/user.js");
 
 
 // getting route links 
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingrouter = require("./routes/listing.js");
+const reviewsrouter = require("./routes/review.js");
+const userrouter = require("./routes/user.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -49,21 +50,12 @@ app.get("/", (req, res) => {
    res.send("app started");
 });
 
-app.get("/demouser",async (req,res)=>{
-   const fakeuser = new User({
-      email : "main@gmail.com",
-      username : "sumedh"
-   });
-
-   const saveduser = await User.register(fakeuser, "sorry");
-   res.send(saveduser);
-})
 
 app.use(session(sessionoptions));
 app.use(flash());
 
-passport.initialize();
-passport.session();
+app.use(passport.initialize());
+app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
@@ -73,11 +65,13 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next)=> {
    res.locals.success = req.flash("success");
    res.locals.error = req.flash("error");
+   res.locals.curruser = req.user;
    next();
 });
 
-app.use("/listing", listings);
-app.use("/listing/:id/reviews", reviews);
+app.use("/listing", listingrouter);
+app.use("/listing/:id/router", reviewsrouter);
+app.use("/", userrouter);
 
 
 app.use((req, res, next) => {
