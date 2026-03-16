@@ -2,20 +2,10 @@ const express = require("express");
 const router = express.Router();
 const wrapasync = require("../utils/wrapasync.js");
 const ExpressError = require("../utils/ExpressError.js");
-const { listingschema, reviewsschema } = require("../schema.js");
+
 const Listing = require("../models/listing.js");
-const { isloggedin } = require("../middleware.js");
+const { isloggedin, isOwner, validatelisting } = require("../middleware.js");
 
-const validatelisting = (req, res, next) => {
-   let { error } = listingschema.validate(req.body);
-
-   if (error) {
-      let errmsg = error.details.map((el) => el.message).join(",");
-      throw new ExpressError(400, errmsg);
-   } else {
-      next();
-   }
-}
 
 // index route 
 router.get("/", wrapasync(async (req, res) => {
@@ -31,7 +21,7 @@ router.get("/new", isloggedin, (req, res) => {
 // show route 
 router.get("/:id", wrapasync(async (req, res) => {
    const { id } = req.params;
-   const listingdata = await Listing.findById(id).populate("Review");
+   const listingdata = await Listing.findById(id).populate("Review").populate("owner");
    if (!listingdata) {
       req.flash("error", "post you are looking for does not eist");
       res.redirect("/listing");
@@ -43,13 +33,14 @@ router.get("/:id", wrapasync(async (req, res) => {
 // create listing 
 router.post("/", isloggedin, validatelisting, wrapasync(async (req, res, next) => {
    const newlisting = new Listing(req.body.listing);
+   newlisting.owner = req.user._id;
    await newlisting.save();
    req.flash("success", "new post added successfully");
    res.redirect("/listing");
 }));
 
 // edit route  
-router.get("/:id/edit", isloggedin, wrapasync(async (req, res) => {
+router.get("/:id/edit", isloggedin, isOwner, wrapasync(async (req, res) => {
    const { id } = req.params;
    const listing1 = await Listing.findById(id);
    if (!listing1) {
@@ -61,15 +52,14 @@ router.get("/:id/edit", isloggedin, wrapasync(async (req, res) => {
 }));
 
 // post edit 
-router.put("/:id", isloggedin, wrapasync(async (req, res) => {
+router.put("/:id", isloggedin, isOwner, wrapasync(async (req, res) => {
    if (!req.body.listing) {
       throw new ExpressError(404, "Please enter some valid data");
    }
    const { id } = req.params;
    // Convert listing.image (string) to image.url for the schema
    const updateData = { ...req.body.listing };
-   console.log(updateData.image);
-   if (updateData.image) {
+      if (updateData.image) {
       updateData.image = {
          filename: "listingimage",
          url: updateData.image
@@ -81,7 +71,7 @@ router.put("/:id", isloggedin, wrapasync(async (req, res) => {
 }));
 
 // post delete 
-router.get("/:id/delete", isloggedin, wrapasync(async (req, res) => {
+router.get("/:id/delete", isloggedin, isOwner, wrapasync(async (req, res) => {
    const { id } = req.params;
    await Listing.findByIdAndDelete(id);
    req.flash("success", "post deleted");

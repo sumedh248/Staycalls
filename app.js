@@ -70,7 +70,7 @@ app.use((req, res, next)=> {
 });
 
 app.use("/listing", listingrouter);
-app.use("/listing/:id/router", reviewsrouter);
+app.use("/listing/:id/reviews", reviewsrouter);
 app.use("/", userrouter);
 
 
