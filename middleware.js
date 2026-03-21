@@ -1,4 +1,5 @@
 const Listing = require("./models/listing.js");
+const review = require("./models/review.js");
 const { listingschema, reviewsschema } = require("./schema.js");
 
 // login checkups
@@ -57,4 +58,16 @@ module.exports.validatereview = (req, res, next) => {
    }else{
       next();
    }
+}
+
+// review owner checkup
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+   let { id, revid } = req.params;
+   const Review = await review.findById(revid);
+   if (!Review.author.equals(res.locals.curruser._id)) {
+      req.flash("error", "You are not owner of this post");
+      return res.redirect(`/listing/${id}`);
+   }
+   next();
 }

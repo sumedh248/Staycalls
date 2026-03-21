@@ -28,52 +28,58 @@
             <a class="btn btn-dark" href="/listing/<%= listingdata.id %>/delete">delete</a>
          </div>
          <% } %>
-
             <div>
                <hr>
-               <h4>Leave a Review</h4>
-               <form action="/listing/<%= listingdata.id %>/reviews" method="post" novalidate class="needs-validation">
-                  <div class="mt-3 mb-3">
-                     <label for="rating">Rate our place</label>
-                     <input name="Review[rating]" type="range" min="1" max="5" class="form-control" required>
-                     <div class="invalid-feedback">Enter Ratings</div>
-                  </div>
+               <% if(curruser){ %>
+                  <h4>Leave a Review</h4>
+                  <form action="/listing/<%= listingdata.id %>/reviews" method="post" novalidate
+                     class="needs-validation">
+                     <label for="rating">Rate our place</label><br>
+                     <fieldset class="starability-checkmark">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="Review[rating]" value="1" checked
+                           aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="Review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="Review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="Review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="Review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="Review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                     </fieldset>
 
-                  <div class="mt-3 mb-3">
-                     <label for="rating">Feedaback</label>
-                     <textarea cols="30" rows="5" name="Review[comments]" class="form-control" id=""
-                        required></textarea>
-                     <div class="invalid-feedback">Enter Review</div>
-                  </div>
-
-                  <button type="submit" class="btn btn-outline-dark mb-3">Sumbit</button>
-               </form>
-
-               <hr>
-
-               <div class="row pt-3">
-                  <% for(Review of listingdata.Review){ %>
-                     <div class="card col-5 ms-5  mb-3">
-                        <div class="card-body">
-                           <h5 class="card-title">Core Mem</h5>
-                           <p class="card-body">
-                              <%= Review.comments %>
-                           </p>
-                           <p class="card-body">
-                              <%= Review.rating %>
-                                 <% for(let i=0;i<Review.rating;i++){ %>
-                                    &#11088;
-                                    <% } %>
-                           </p>
-
-                           <form method="post"
-                              action="/listing/<%= listingdata.id %>/reviews/<%= Review._id %>?_method=DELETE">
-                              <button class="btn btn-sm btn-dark">Delete</button>
-                           </form>
-
-                        </div>
+                     <div class="mb-3">
+                        <label for="rating">Feedaback</label><br>
+                        <textarea cols="30" rows="5" name="Review[comments]" class="form-control" id=""
+                           required></textarea>
+                        <div class="invalid-feedback">Enter Review</div>
                      </div>
-                     <% } %>
-               </div>
+                     <button type="submit" class="btn btn-outline-dark mb-3">Sumbit</button>
+                  </form>
+                  <% } %>
+
+
+                     <div class="row pt-3">
+                        <% for(Review of listingdata.Review){ %>
+                           <div class="card col-5 ms-5  mb-3">
+                              <div class="card-body">
+                                 <h5 class="card-title">@ <%= Review.author.username %>
+                                 </h5>
+                                 <p class="starability-result card-text" data-rating="<%= Review.rating %>"> </p>
+                                 <p class="card-body">
+                                    <%= Review.comments %>
+                                 </p>
+                                 <% if(curruser && curruser._id.equals(Review.author._id)) {%>
+                                    <form method="post"
+                                       action="/listing/<%= listingdata.id %>/reviews/<%= Review._id %>?_method=DELETE">
+                                       <button class="btn btn-sm btn-dark">Delete</button>
+                                    </form>
+                                    <% } %>
+                              </div>
+                           </div>
+                           <% } %>
+                     </div>
             </div>
    </body>
