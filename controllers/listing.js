@@ -1,7 +1,7 @@
 const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
 
-   
+
 // index route
 module.exports.index = async (req, res) => {
    const allListings = await Listing.find({});
@@ -17,9 +17,9 @@ module.exports.newPost = (req, res) => {
 module.exports.showpost = async (req, res) => {
    const { id } = req.params;
    const listingdata = await Listing.findById(id)
-   .populate({path : "Review", populate : {path : "author"}})
-   .populate("owner");
-        if (!listingdata) {
+      .populate({ path: "Review", populate: { path: "author" } })
+      .populate("owner");
+   if (!listingdata) {
       req.flash("error", "post you are looking for does not eist");
       res.redirect("/listing");
       return;
@@ -29,7 +29,11 @@ module.exports.showpost = async (req, res) => {
 
 // create post
 module.exports.createPost = async (req, res, next) => {
+   let url = req.file.path;
+   let filename = req.file.filename;
+
    const newlisting = new Listing(req.body.listing);
+   newlisting.image = { url, filename };
    newlisting.owner = req.user._id;
    await newlisting.save();
    req.flash("success", "new post added successfully");
@@ -45,7 +49,12 @@ module.exports.editPostRoute = async (req, res) => {
       res.redirect("/listing");
       return;
    }
-   res.render("listing/edit.ejs", { listing1 });
+
+   let orignalImage = listing1.image.url;
+   orignalImage = orignalImage.replace('/upload', '/upload/w_250,h_250')
+   console.log(orignalImage);
+
+   res.render("listing/edit.ejs", { listing1, orignalImage });
 };
 
 
@@ -55,15 +64,15 @@ module.exports.editPost = async (req, res) => {
       throw new ExpressError(404, "Please enter some valid data");
    }
    const { id } = req.params;
-   // Convert listing.image (string) to image.url for the schema
-   const updateData = { ...req.body.listing };
-      if (updateData.image) {
-      updateData.image = {
-         filename: "listingimage",
-         url: updateData.image
-      };
+   const updateData = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+   if (typeof req.file !== 'undefined') {
+      let url = req.file.path;
+      let filename = req.file.filename;
+      updateData.image = { url, filename };
+      await updateData.save();
    }
-   await Listing.findByIdAndUpdate(id, updateData);
+
    req.flash("success", "post edited");
    res.redirect(`/listing/${id}`);
 };

@@ -14,15 +14,8 @@ const listschema = new mongoose.Schema({
    description: String,
 
    image: {
-      filename: {
-         type: String,
-         default: "listingimage"
-      },
-      url: {
-         type: String,
-         default: defaultImg,
-         set: (v) => v === "" ? defaultImg : v
-      }
+      url : String,
+      filename : String
    },
 
    location: {
