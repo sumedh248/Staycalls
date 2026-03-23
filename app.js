@@ -10,10 +10,12 @@ const methodOverride = require("method-override");
 const ejsmate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const MONGOURL = process.env.ATLAS_DB_URL;
 
 
 
@@ -29,8 +31,23 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsmate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const store = MongoStore.create({
+   mongoUrl : MONGOURL,
+   crypto : {
+      secret : process.env.SECRET
+   },
+   touchAfter : 24 * 3600
+});
+
+store.on("error", (err)=>{
+   console.log("error in mongo store", err);
+});
+
+
 const sessionoptions = {
-   secret : "secretkey",
+   store,
+   secret : process.env.SECRET,
    resave : false,
    saveUninitialized : true,
    cookie : {
@@ -41,7 +58,6 @@ const sessionoptions = {
 }
 
 
-const MONGOURL = "mongodb://127.0.0.1:27017/roadguests";
 main().then(() => {
    console.log("connected to db");
 }).catch((err) => {
