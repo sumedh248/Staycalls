@@ -67,9 +67,6 @@ async function main() {
    await mongoose.connect(MONGOURL);
 }
 
-app.get("/", (req, res) => {
-   res.send("app started");
-});
 
 
 app.use(session(sessionoptions));
