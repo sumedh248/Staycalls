@@ -1,6 +1,7 @@
 const Listing = require("./models/listing.js");
 const review = require("./models/review.js");
 const { listingschema, reviewsschema } = require("./schema.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 // login checkups
 

@@ -12,9 +12,11 @@
          <img src="<%= listingdata.image.url %>" class="card-img-top show-img" alt="listing_image">
          <div class="card-body">
             <p class="card-text">
+               <% if(listingdata.owner) { %>
                Owned by <i>
                   <%= listingdata.owner.username %> <br>
                </i>
+               <% } %>
                <%= listingdata.description %> <br>
                   <%= listingdata.location %> <br>
                      &#8377; <%= listingdata.price.toLocaleString("en-IN") %> <br>
@@ -22,7 +24,7 @@
             </p>
          </div>
       </div>
-      <% if(curruser && curruser._id.equals(listingdata.owner._id)) {%>
+      <% if(curruser && listingdata.owner && curruser._id.equals(listingdata.owner._id)) {%>
          <div class="mb-3">
             <a class="btn btn-dark col-1 offset-3 btn-new  " href="/listing/<%= listingdata.id %>/edit">edit</a>
             <a class="btn btn-dark" href="/listing/<%= listingdata.id %>/delete">delete</a>
@@ -63,6 +65,7 @@
 
                      <div class="row pt-3">
                         <% for(Review of listingdata.Review){ %>
+                           <% if(Review.author) { %>
                            <div class="card col-5 ms-5  mb-3">
                               <div class="card-body">
                                  <h5 class="card-title">@ <%= Review.author.username %>
@@ -79,6 +82,7 @@
                                     <% } %>
                               </div>
                            </div>
+                           <% } %>
                            <% } %>
                      </div>
             </div>
