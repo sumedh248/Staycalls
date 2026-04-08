@@ -5,6 +5,11 @@ const passport = require("passport");
 const { redirecturl } = require("../middleware.js");
 const userController = require("../controllers/users.js");
 
+// home route
+router.get("/", (req, res) => {
+   res.redirect("/listing");
+});
+
 router.route("/signup")
    .get(userController.userSignUpRoute)
    .post(wrapasync(userController.userSignUp));
