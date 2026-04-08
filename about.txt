@@ -1,0 +1,99 @@
+================================================================================
+                           StayCalls PROJECT
+================================================================================
+
+PROJECT OVERVIEW:
+StayCalls is a Node.js/Express-based web application for managing travel 
+listings, user reviews, and authentication. It provides a platform for users 
+to browse accommodations, write reviews, and manage their profiles.
+
+TECHNOLOGY STACK:
+- Backend: Node.js with Express.js framework
+- Frontend: EJS templating engine for server-side rendering
+- Styling: CSS (custom styling)
+- Image Management: Cloudinary integration
+- Database: Mongoose (MongoDB driver implied by schema patterns)
+
+================================================================================
+                          DIRECTORY STRUCTURE
+================================================================================
+
+StayCalls/
+│
+├── app.js                          # Main application entry point
+├── cloudinary.js                   # Cloudinary configuration for image uploads
+├── middleware.js                   # Custom middleware functions
+├── package.json                    # Project dependencies and scripts
+├── schema.js                       # Data schema definitions
+│
+├── controllers/                    # Request handlers and business logic
+│   ├── listing.js                 # Listing-related controller functions
+│   ├── review.js                  # Review-related controller functions
+│   └── users.js                   # User-related controller functions
+│
+├── init/                          # Initialization scripts
+│   ├── data.js                    # Sample/seeding data
+│   └── index.js                   # Initialization entry point
+│
+├── models/                        # Database models (Mongoose schemas)
+│   ├── listing.js                 # Listing model definition
+│   ├── review.js                  # Review model definition
+│   └── user.js                    # User model definition
+│
+├── public/                        # Static assets (client-side resources)
+│   ├── css/
+│   │   ├── rating.css             # Styles for rating components
+│   │   └── style.css              # Main stylesheet
+│   └── js/
+│       └── script.js              # Client-side JavaScript
+│
+├── routes/                        # API route definitions
+│   ├── listing.js                 # Listing-related routes
+│   ├── review.js                  # Review-related routes
+│   └── user.js                    # User-related routes (auth & profile)
+│
+├── utils/                         # Utility functions and helpers
+│   ├── ExpressError.js            # Custom error class
+│   └── wrapasync.js               # Async error wrapper for route handlers
+│
+└── views/                         # EJS template files (server-side rendered UI)
+    ├── errors.ejs                 # Error page template
+    ├── includes/                  # Reusable template components
+    │   ├── flash.ejs              # Flash message component
+    │   ├── footer.ejs             # Footer component
+    │   └── navbar.ejs             # Navigation bar component
+    ├── layouts/
+    │   └── boilerplate.ejs        # Base layout template
+    ├── listing/
+    │   ├── edit.ejs               # Listing edit form
+    │   ├── index.ejs              # Listings display/list view
+    │   ├── new.ejs                # Create new listing form
+    │   └── show.ejs               # Individual listing detail view
+    └── user/
+        ├── login.ejs              # User login form
+        └── signup.ejs             # User registration form
+
+================================================================================
+                            KEY FEATURES
+================================================================================
+
+✓ User Authentication (Sign up & Login)
+✓ Create, Read, Update, Delete (CRUD) listings
+✓ Review system for listings
+✓ Image upload and management via Cloudinary
+✓ Responsive UI with EJS templates
+✓ Custom error handling
+✓ Flash messages for user feedback
+
+================================================================================
+                         GETTING STARTED
+================================================================================
+
+1. Install dependencies: npm install
+2. Configure Cloudinary API credentials in cloudinary.js
+3. Set up MongoDB connection string
+4. Run seed data (optional): npm run seed
+5. Start server: npm start
+6. Access application at http://localhost:3000 (or configured port)
+
+================================================================================
